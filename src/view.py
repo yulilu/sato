@@ -100,6 +100,8 @@ def predicts():
         # ファイルのチェック
         if file and allwed_file(file.filename):
 
+            return render_template('result.html', kakinotaneCount=1, nutsCount=2,kakinotaneRatio=50, nutsRatio=50, image='')
+
             #　画像ファイルに対する処理
             #　画像書き込み用バッファを確保
             buf = io.BytesIO()
