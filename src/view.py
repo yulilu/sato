@@ -100,17 +100,20 @@ def predicts():
         # ファイルのチェック
         if file and allwed_file(file.filename):
 
-            return render_template('result.html', kakinotaneCount=1, nutsCount=2,kakinotaneRatio=50, nutsRatio=50, image='')
+            print("★　1")
 
             #　画像ファイルに対する処理
             #　画像書き込み用バッファを確保
             buf = io.BytesIO()
             image = Image.open(file).convert('RGB')
 
+            print("★　2")
 
             # 入力された画像に対して推論
             preds, draw_image = predict(image)
             pred = preds[0]
+
+            print("★　3")
             '''
             kakinotane_count_ : 柿の種の数
             nuts_count_ : ピーナッツの数
@@ -118,12 +121,17 @@ def predicts():
             kakinotane_count = collections.Counter(pred.boxes.cls.numpy())
             kakinotane_count_ = kakinotane_count[0]
             nuts_count_ = kakinotane_count[1]
+
+            print("★　4")
             
             kakinotane_list = [kakinotane_count[0], kakinotane_count[1]]
             # 最大公約数
             gcd = math.gcd(*kakinotane_list)
+            print("★　5")
+
             kakinotane_ratio_, nuts_ratio_= (int(i / gcd) for i in kakinotane_list)
             
+            print("★　6")
 
             '''
             result.indexで表示する画像を640*640で表示するためにリサイズ
@@ -136,6 +144,7 @@ def predicts():
             base64_str = base64.b64encode(buf.getvalue()).decode('utf-8')
             #　HTML 側の src  の記述に合わせるために付帯情報付与する
             base64_data = 'data:image/png;base64,{}'.format(base64_str)
+            print("★　7")
             return render_template('result.html', kakinotaneCount=kakinotane_count_, nutsCount=nuts_count_,kakinotaneRatio=kakinotane_ratio_, nutsRatio=nuts_ratio_, image=base64_data)
         
         return redirect(request.url)
